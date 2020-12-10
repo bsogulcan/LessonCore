@@ -1,0 +1,191 @@
+<form autocomplete="off" #editTenantForm="ngForm">
+  <h1 mat-dialog-title>{{ "EditClassRoom" | localize }}</h1>
+
+  <h1 mat-dialog-title>{{ "CreateClassRoom" | localize }}</h1>
+  <mat-tab-group>
+    <mat-tab label="Definitions">
+      <mat-dialog-content style="margin: 0%;">
+      <div class="row-fluid">
+        <div class="col-md-12">
+          <mat-form-field class="full-width-field">
+            <input
+              matInput
+              name="ClassRoomName"
+              [placeholder]="'ClassRoomName' | localize"
+              [(ngModel)]="classRoom.name"
+              required
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="col-md-12">
+          <mat-form-field class="full-width-field">
+            <input
+              matInput
+              name="ClassRoomBranch"
+              [placeholder]="'Branch' | localize"
+              [(ngModel)]="classRoom.branch"
+              required
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="col-md-12">
+          <mat-form-field class="full-width-field">
+            <textarea
+              matInput
+              name="ClassRoomDetail"
+              [placeholder]="'ClassRoomDescription' | localize"
+              [(ngModel)]="classRoom.description"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+   </mat-tab>
+    <mat-tab label="Lessons">
+      <mat-dialog-content style="margin: 0%; margin-top: 10px">
+        <div class="row-fluid">
+          <div class="col-md-12">
+            <mat-form-field style="width: 70%;">
+              <mat-label>Select a Lesson</mat-label>
+              <mat-select [(value)]="selectedLesson">
+                <mat-option *ngFor="let lesson of lessons" [value]="lesson">
+                  {{ lesson.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button style="margin-left: 20px;" mat-flat-button color="primary" (click)="addLessonToClassRoom()" >
+              Add Lesson
+            </button>
+          </div>
+        </div>
+      </mat-dialog-content>
+
+      <dx-data-grid
+        id="gridContainer"
+        [dataSource]="classRoom.lessons"
+        [columns]="['LessonName', 'id']"
+        [showBorders]="true"
+      >
+        <dxi-column
+          dataField="id"
+          caption="{{ 'Id' | localize }}"
+          alignment="left"
+          [visible]="false"
+        ></dxi-column>
+        <!-- <dxi-column dataField="name" [groupIndex]="0"></dxi-column> -->
+        <dxi-column
+          dataField="name"
+          caption="{{ 'LessonName' | localize }}"
+          alignment="center"
+        ></dxi-column>
+        <dxi-column
+          type="buttons"
+          [width]="110"
+          caption="{{ 'Actions' | localize }}"
+          alignment="center"
+        >
+          <dxi-button template="editButtonTemplate">
+            <div *dxTemplate="let editData of 'editButtonTemplate'">
+              <dx-button
+                icon="trash"
+                title="Delete"
+                type="danger"
+                hint="{{ 'Delete' | localize }}"
+                (onClick)="deleteLessonFromClassRoom(editData.data)"
+              >
+              </dx-button>
+            </div>
+          </dxi-button>
+        </dxi-column>
+      </dx-data-grid>
+
+    </mat-tab>
+    <mat-tab label="Students">
+      <mat-dialog-content style="margin: 0%; margin-top: 10px">
+        <div class="row-fluid">
+          <div class="col-md-12">
+            <mat-form-field style="width: 70%;">
+              <mat-label>Select a Student</mat-label>
+              <mat-select [(value)]="selectedStudent">
+                <mat-option *ngFor="let student of students" [value]="student">
+                  {{ student.name }} {{ student.lastName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button style="margin-left: 20px;" mat-flat-button color="primary" (click)="addStudentToClassRoom()" >
+              Add Student
+            </button>
+          </div>
+        </div>
+      </mat-dialog-content>
+
+      <dx-data-grid
+        id="gridContainer"
+        [dataSource]="classRoom.students"
+        [columns]="['studentName','studentLastName', 'id']"
+        [showBorders]="true"
+      >
+        <dxi-column
+          dataField="id"
+          caption="{{ 'Id' | localize }}"
+          alignment="left"
+          [visible]="false"
+        ></dxi-column>
+        <!-- <dxi-column dataField="name" [groupIndex]="0"></dxi-column> -->
+        <dxi-column
+          dataField="name"
+          caption="{{ 'StudentName' | localize }}"
+          alignment="center"
+        ></dxi-column>
+        <dxi-column
+          dataField="lastName"
+          caption="{{ 'StudentLastName' | localize }}"
+          alignment="center"
+        ></dxi-column>
+        <dxi-column
+          type="buttons"
+          [width]="110"
+          caption="{{ 'Actions' | localize }}"
+          alignment="center"
+        >
+          <dxi-button template="editButtonTemplate">
+            <div *dxTemplate="let editData of 'editButtonTemplate'">
+              <dx-button
+                icon="trash"
+                title="Delete"
+                type="danger"
+                hint="{{ 'Delete' | localize }}"
+                (onClick)="deleteStudentFromClassRoom(editData.data)"
+              >
+              </dx-button>
+            </div>
+          </dxi-button>
+        </dxi-column>
+      </dx-data-grid>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="saving" (click)="close(false)">
+      {{ "Cancel" | localize }}
+    </button>
+    <button
+      mat-flat-button
+      type="submit"
+      flex="15"
+      color="primary"
+      [disabled]="!editTenantForm.form.valid || saving"
+      (click)="save()"
+    >
+      {{ "Save" | localize }}
+    </button>
+  </div>
+</form>

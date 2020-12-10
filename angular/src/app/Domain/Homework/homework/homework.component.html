@@ -1,0 +1,234 @@
+<div [@routerTransition]>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1>{{ "Homeworks" | localize }}</h1>
+        </div>
+        <div class="col-6 text-right">
+          <button mat-flat-button color="primary" (click)="createHomeWork()">
+            Create Homework
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <dx-data-grid
+            #grid
+            id="gridContainer"
+            [dataSource]="dataSource"
+            keyExpr="id"
+            [hoverStateEnabled]="true"
+            [selectedRowKeys]="[]"
+            [showBorders]="true"
+            [allowColumnReordering]="true"
+            [allowColumnResizing]="true"
+            [columnHidingEnabled]="true"
+            [columnAutoWidth]="true"
+            style="min-height: 400px !important; height: 550px !important"
+            (onToolbarPreparing)="onToolbarPreparing($event)"
+            (onOptionChanged)="onOptionChanged($event)"
+          >
+            <!-- Toolbar Customization -->
+            <div *dxTemplate="let data of 'formNameTemplate'">
+              <!-- <h4>{{ "Departments" | localize }}</h4> -->
+            </div>
+            <div *dxTemplate="let data of 'refreshButtonTemplate'">
+              <dx-button
+                icon="refresh"
+                type="normal"
+                hint="{{ 'Refresh' | localize }}"
+                (onClick)="refreshDataGrid()"
+              >
+              </dx-button>
+            </div>
+            <!-- columns -->
+            <dxi-column
+              dataField="id"
+              caption="{{ 'Id' | localize }}"
+              alignment="left"
+              [visible]="false"
+            ></dxi-column>
+            <!-- <dxi-column dataField="name" [groupIndex]="0"></dxi-column> -->
+            <dxi-column
+              dataField="classRoom.name"
+              caption="{{ 'ClassRoom' | localize }}"
+              alignment="center"
+            ></dxi-column>
+            <dxi-column
+            dataField="classRoom.branch"
+            caption="{{ 'ClassRoomBranch' | localize }}"
+            alignment="center"
+          ></dxi-column>
+            <dxi-column
+              dataField="lesson.name"
+              caption="{{ 'Lesson' | localize }}"
+              alignment="center"
+            ></dxi-column>
+            <dxi-column
+              dataField="teacher.name"
+              caption="{{ 'TeacherName' | localize }}"
+              alignment="center"
+            ></dxi-column>
+            <dxi-column
+              dataField="teacher.lastName"
+              caption="{{ 'TeacherLastName' | localize }}"
+              alignment="center"
+            ></dxi-column>
+            <dxi-column
+              dataField="summary"
+              caption="{{ 'HomeworkSummary' | localize }}"
+              alignment="center"
+            ></dxi-column>
+            <dxi-column
+              dataField="description"
+              caption="{{ 'HomeworkDescription' | localize }}"
+              alignment="center"
+            ></dxi-column>
+
+            <dxi-column
+              type="buttons"
+              [width]="110"
+              caption="{{ 'Actions' | localize }}"
+              alignment="center"
+            >
+              <dxi-button template="editButtonTemplate">
+                <div *dxTemplate="let editData of 'editButtonTemplate'">
+                  <dx-button
+                    icon="edit"
+                    title="Edit"
+                    type="default"
+                    hint="{{ 'Edit' | localize }}"
+                    (onClick)="editHomework(editData.data.id)"
+                  >
+                  </dx-button>
+
+                  <dx-button
+                    icon="trash"
+                    title="Delete"
+                    type="danger"
+                    hint="{{ 'Delete' | localize }}"
+                    (onClick)="deleteHomework(editData.data)"
+                  >
+
+                  </dx-button>
+
+                  <dx-button
+                    icon="info"
+                    title="Detail"
+                    type="default"
+                    hint="{{ 'DetailHomework' | localize }}"
+                    (onClick)="detailHomework(editData.data)"
+                  >
+
+                  </dx-button>
+                </div>
+              </dxi-button>
+            </dxi-column>
+
+            <!-- <dxo-column-chooser [enabled]="true" title="{{ 'ColumnChooser' | localize }}"  mode="select"></dxo-column-chooser> -->
+            <dxo-column-chooser
+              [enabled]="true"
+              title="{{ 'ColumnChooser' | localize }}"
+            ></dxo-column-chooser>
+            <dxo-load-panel [enabled]="true"></dxo-load-panel>
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+            <!-- sorting-->
+            <dxo-sorting mode="multiple"></dxo-sorting>
+
+            <!-- paging -->
+            <!-- <dxo-paging [pageSize]="10"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true"
+                  [allowedPageSizes]="[5, 10, 20]"
+                  [showInfo]="true">
+                  </dxo-pager> -->
+
+            <!-- Export Settings-->
+            <dxo-export
+              [enabled]="true"
+              fileName="Departments"
+              [allowExportSelectedData]="true"
+            >
+              <dxo-texts
+                exportAll="{{ 'ExportAllData' | localize }}"
+                exportSelectedRows="{{ 'ExportSelectedRows' | localize }}"
+                exportTo="{{ 'Export' | localize }}"
+              >
+              </dxo-texts>
+            </dxo-export>
+            <!-- Selection-->
+            <dxo-selection mode="multiple"></dxo-selection>
+            <!-- Filtering-->
+            <dxo-filter-row
+              [visible]="true"
+              resetOperationText="{{ 'ResetOperationText' | localize }}"
+            >
+              <dxo-operation-descriptions
+                between="{{ 'Between' | localize }}"
+                contains="{{ 'Contains' | localize }}"
+                endsWith="{{ 'EndsWith' | localize }}"
+                equal="{{ 'Equal' | localize }}"
+                greaterThan="{{ 'GreaterThan' | localize }}"
+                greaterThanOrEqual="{{ 'greaterThanOrEqual' | localize }}"
+                lessThan="{{ 'LessThan' | localize }}"
+                lessThanOrEqual="{{ 'LessThanOrEqual' | localize }}"
+                notContains="{{ 'NotContains' | localize }}"
+                notEqual="{{ 'NotEqual' | localize }}"
+                startsWith="{{ 'StartsWith' | localize }}"
+              >
+              </dxo-operation-descriptions>
+            </dxo-filter-row>
+            <dxo-header-filter [visible]="true"></dxo-header-filter>
+            <dxo-search-panel
+              [visible]="true"
+              [width]="240"
+              placeholder="{{ 'SearchPanelPlaceholder' | localize }}"
+            >
+            </dxo-search-panel>
+            <dxo-filter-panel [visible]="true">
+              <dxo-texts createFilter="{{ 'CreateFilter' | localize }}">
+              </dxo-texts>
+            </dxo-filter-panel>
+            <dxo-filter-builder>
+              <dxo-group-operation-descriptions
+                and="{{ 'And' | localize }}"
+                notAnd="{{ 'NotAnd' | localize }}"
+                notOr="{{ 'NotOr' | localize }}"
+                or="{{ 'Or' | localize }}"
+              ></dxo-group-operation-descriptions>
+            </dxo-filter-builder>
+            <!-- <dxo-filter-builder-popup [position]="popupPosition"
+                  title="{{ 'FilterBuilder' | localize }}">
+                  </dxo-filter-builder-popup> -->
+            <dxo-filter-builder-popup title="{{ 'FilterBuilder' | localize }}">
+            </dxo-filter-builder-popup>
+
+            <!-- grouping -->
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+
+            <!-- Grid Summuries-->
+            <dxo-summary>
+              <dxi-total-item column="id" summaryType="count"> </dxi-total-item>
+              <!-- <dxi-total-item
+                          column="OrderDate"
+                          summaryType="min"
+                          [customizeText]="customizeDate">
+                      </dxi-total-item>
+                      <dxi-total-item
+                          column="SaleAmount"
+                          summaryType="sum"
+                          valueFormat="currency">
+                      </dxi-total-item> -->
+            </dxo-summary>
+          </dx-data-grid>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

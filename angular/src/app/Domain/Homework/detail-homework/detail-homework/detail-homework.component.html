@@ -1,0 +1,114 @@
+<section class="content-header ng-tns-c462-8">
+  <div class="container-fluid ng-tns-c462-8">
+    <div class="row ng-tns-c462-8">
+      <div class="col-12 ng-tns-c462-8">
+        <h1 class="ng-tns-c462-8">{{ homework.summary }}</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content px-2 ng-tns-c461-2">
+  <div class="container-fluid ng-tns-c461-2">
+    <div class="row ng-tns-c461-3">
+      <div class="col-12 col-sm-6 col-md-4 ng-tns-c461-4">
+        <div class="info-box ng-tns-c461-4">
+          <span class="info-box-icon bg-primary elevation-1 ng-tns-c461-4"
+            ><i class="fas fa-hotel"></i
+          ></span>
+          <div class="info-box-content ng-tns-c461-1">
+            <span class="info-box-text ng-tns-c461-1">ClassRoom</span
+            ><span class="info-box-number ng-tns-c461-1">
+              {{ homework.classRoom.name }} {{ homework.classRoom.branch }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 ng-tns-c461-4">
+        <div class="info-box mb-4 ng-tns-c461-4">
+          <span class="info-box-icon bg-warning elevation-1 ng-tns-c461-4"
+            ><i class="fas fa-book"></i
+          ></span>
+          <div class="info-box-content ng-tns-c461-4">
+            <span class="info-box-text ng-tns-c461-4">Lesson</span
+            ><span class="info-box-number ng-tns-c461-4">
+              {{ homework.lesson.name }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix hidden-md-up ng-tns-c461-4"></div>
+      <div class="col-12 col-sm-6 col-md-4 ng-tns-c461-4">
+        <div class="info-box mb-4 ng-tns-c461-4">
+          <span class="info-box-icon bg-info elevation-1 ng-tns-c461-4"
+            ><i class="fas fa-users"></i
+          ></span>
+          <div class="info-box-content ng-tns-c461-4">
+            <span class="info-box-text ng-tns-c461-4">Teacher</span
+            ><span class="info-box-number ng-tns-c461-4">
+              {{ homework.teacher.name }} {{ homework.teacher.lastName }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content px-2 ng-tns-c462-4">
+  <div class="container-fluid ng-tns-c462-4">
+    <div class="card ng-tns-c462-4">
+      <div class="card-body ng-tns-c462-2">
+        <h3 _ngcontent-kql-c66="" class="ng-tns-c462-4 ng-tns-c66-1">
+          Description
+        </h3>
+        {{ homework.description }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content px-2 ng-tns-c462-4">
+  <div class="container-fluid ng-tns-c462-4">
+
+<mat-tab-group>
+
+  <mat-tab label="Submit">
+
+    <div class="card ng-tns-c462-4">
+      <div class="card-body ng-tns-c462-2">
+        <div class="row" style="margin: 10px">
+          <div>
+            <div class="input-group">
+              <div class="custom-file">
+                <input #inputFile type="file" (change)="selectedFileChanged(inputFile.files)" class="custom-file-input" id="inputGroupFile04">
+                <label class="custom-file-label" for="inputGroupFile04">  </label>
+              </div>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Upload</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</mat-tab>
+
+  <mat-tab label="Content">
+        <div class="card ng-tns-c462-4">
+          <div class="card-body ng-tns-c462-2">
+            <div *ngFor="let file of homework.files">
+              <video controls width="600" height="300" (ended)="ended()"  (timeupdate)="onTimeUpdate($event,file)" >
+                <source [src]="createImagePath(file.path)" type="video/mp4">
+               </video>
+            </div>
+          </div>
+        </div>
+
+  </mat-tab>
+
+</mat-tab-group>
+
+  </div>
+</section>
